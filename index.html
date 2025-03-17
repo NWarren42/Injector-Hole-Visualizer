@@ -10,10 +10,16 @@
     <h1>Fluid Injector Pattern</h1>
     <div class="controls">
         <label for="numHoles">Number of Holes:</label>
-        <input type="number" id="numHoles" value="16" min="1">
+        <input type="number" id="numHoles" value="33" min="1">
         
-        <label for="minSpacing">Minimum Spacing (px):</label>
-        <input type="number" id="minSpacing" value="50" min="10">
+        <label for="spacingMode">Spacing Mode:</label>
+        <select id="spacingMode">
+            <option value="pixel">Pixel</option>
+            <option value="angle">Angle</option>
+        </select>
+
+        <label for="spacingValue" id="spacingLabel">Minimum Spacing (px):</label>
+        <input type="number" id="spacingValue" value="30" min="10" max="100">
     </div>
     
     <canvas id="injectorCanvas"></canvas>

@@ -6,7 +6,10 @@ canvas.height = 800;
 
 // Get input elements
 const numHolesInput = document.getElementById("numHoles");
-const spacingInput = document.getElementById("minSpacing");
+const spacingValue = document.getElementById("spacingValue");
+
+const spacingMode = document.getElementById("spacingMode");
+const spacingLabel = document.getElementById("spacingLabel");
 
 // Function to draw a circular hole
 function drawHole(x, y, radius) {
@@ -21,38 +24,55 @@ function drawOptimalPattern() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const totalHoles = parseInt(numHolesInput.value);
-    const minSpacing = parseInt(spacingInput.value);
+    const minSpacing = parseInt(spacingValue.value);
 
     let placedHoles = 0;
     let radius = minSpacing;  // Start with smallest radius possible
-    let ring = 0;
 
     // Center the pattern
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
 
     while (placedHoles < totalHoles) {
-        let numHoles = Math.floor((2 * Math.PI * radius) / minSpacing); // Spacing is minimal arclength, not straight p2p
-        numHoles = Math.min(numHoles, totalHoles - placedHoles); // Ensure we don’t exceed total points
+        let numHoles;
+        
+        // Calculate number of holes in current ring
+        if (spacingMode.value === "pixel"){
+            numHoles= Math.floor((2 * Math.PI * radius) / minSpacing); // Spacing is minimal arclength, not straight p2p
+            numHoles = Math.min(numHoles, totalHoles - placedHoles); // Ensure we don’t exceed total points
+        } else {
+            // Use angular spacing: Convert degrees to radians and determine how many points fit
+            let angleSpacing = (spacingValue.value * Math.PI) / 180; // Convert degrees to radians
+            numHoles = Math.min(Math.floor(2 * Math.PI / angleSpacing), totalHoles - placedHoles);
+        }
         
         for (let i = 0; i < numHoles; i++) {
             let angle = (i / numHoles) * (2 * Math.PI);
-            let x = centerX + radius * Math.cos(angle);
-            let y = centerY + radius * Math.sin(angle);
+            let x = centerX + radius * Math.cos(angle - Math.PI / 2); // Subtract PI/2 to start at 12 o’clock
+            let y = centerY + radius * Math.sin(angle - Math.PI / 2); // Subtract PI/2 to start at 12 o’clock
             drawHole(x, y, 8);
         }
         
         placedHoles += numHoles;
         radius += minSpacing; // Increase radius for next ring
-        ring++;
     }
 }
 
+function updateSpacingLabel() {
+    if (spacingMode.value === "pixel") {
+        spacingLabel.innerText = "Point Spacing (pixels):";
+    } else {
+        spacingLabel.innerText = "Point Spacing (degrees):";
+    }
+    drawOptimalPattern(); // Redraw pattern when spacing mode changes
+}
 
 // Add event listeners for live updates
-[numHolesInput, spacingInput].forEach(input => {
+[numHolesInput, spacingValue].forEach(input => {
     input.addEventListener("input", drawOptimalPattern);
 });
+spacingMode.addEventListener("change", updateSpacingLabel);
 
 // Initial draw
+updateSpacingLabel();
 drawOptimalPattern();
