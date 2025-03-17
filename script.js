@@ -28,6 +28,7 @@ function drawOptimalPattern() {
 
     let placedHoles = 0;
     let radius = minSpacing;  // Start with smallest radius possible
+    let ring = 1;
 
     // Center the pattern
     const centerX = canvas.width / 2;
@@ -46,13 +47,25 @@ function drawOptimalPattern() {
             numHoles = Math.min(Math.floor(2 * Math.PI / angleSpacing), totalHoles - placedHoles);
         }
         
+        let angleDelta = 2 * Math.PI / numHoles; // Calculate angle between holes
+
         for (let i = 0; i < numHoles; i++) {
-            let angle = (i / numHoles) * (2 * Math.PI);
+            let angle = i*angleDelta; // Calculate angle for current hole
             let x = centerX + radius * Math.cos(angle - Math.PI / 2); // Subtract PI/2 to start at 12 o’clock
             let y = centerY + radius * Math.sin(angle - Math.PI / 2); // Subtract PI/2 to start at 12 o’clock
             drawHole(x, y, 8);
         }
         
+        // Draw the indicator for the number of points in the current ring
+        ctx.fillStyle = "black";
+        ctx.font = "16px Times New Roman";
+        ctx.fillText(`Ring ${ring}: ${numHoles} holes`, 10, 20 + 25*(ring-1));
+
+        // Draw the indicator for point spacing data
+        ctx.fillText(`Ring ${ring} angle: ${Math.ceil(angleDelta*(180/Math.PI))}°`, canvas.width - 130, 20 + 25*(ring-1));
+
+
+        ring++;
         placedHoles += numHoles;
         radius += minSpacing; // Increase radius for next ring
     }
