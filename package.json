@@ -1,0 +1,25 @@
+{
+  "name": "injector-hole-visualizer",
+  "version": "1.0.0",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NWarren42/Injector-Hole-Visualizer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NWarren42/Injector-Hole-Visualizer/issues"
+  },
+  "homepage": "https://github.com/NWarren42/Injector-Hole-Visualizer#readme",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "eslint": "^9.22.0",
+    "globals": "^16.0.0"
+  }
+}
